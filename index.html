@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <title>Y&Y // CURTAIN</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <div class="brand"><span>Y&Y</span><b>CURTAIN</b></div>
+    <div class="status"><i></i> ANALYSIS NODE // LOCAL</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">REALITY DEBUGGER // CLAIM ANALYSIS</p>
+      <h1>WHAT DO YOU THINK IS TRUE?</h1>
+      <p class="sub">
+        Enter a claim. CURTAIN separates evidence from interpretation,
+        attacks assumptions, maps competing explanations, and tracks where the narrative came from.
+      </p>
+
+      <form id="claimForm" class="claim-box">
+        <textarea id="claimInput" maxlength="1200"
+          placeholder="Enter a claim, theory, event, narrative, or question..."></textarea>
+        <div class="claim-actions">
+          <span id="count">0 / 1200</span>
+          <button type="submit">ANALYZE CLAIM</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="workspace" class="workspace hidden">
+      <div class="workspace-head">
+        <div>
+          <p class="eyebrow">ACTIVE CLAIM</p>
+          <h2 id="activeClaim"></h2>
+        </div>
+        <button id="resetBtn" class="ghost">CLEAR</button>
+      </div>
+
+      <div class="scoregrid">
+        <article><span>EVIDENCE</span><strong id="evidenceScore">—</strong><small>Verified support</small></article>
+        <article><span>CONFIDENCE</span><strong id="confidenceScore">—</strong><small>Current assessment</small></article>
+        <article><span>INDEPENDENCE</span><strong id="independenceScore">—</strong><small>Source diversity</small></article>
+        <article><span>CONTRADICTION</span><strong id="contradictionScore">—</strong><small>Conflicting evidence</small></article>
+      </div>
+
+      <nav class="tabs" aria-label="Analysis views">
+        <button class="tab active" data-tab="evidence">EVIDENCE</button>
+        <button class="tab" data-tab="counter">COUNTERCASE</button>
+        <button class="tab" data-tab="genealogy">GENEALOGY</button>
+        <button class="tab" data-tab="predictions">PREDICTIONS</button>
+        <button class="tab" data-tab="silence">NULL ZONES</button>
+      </nav>
+
+      <div class="panels">
+        <section class="panel active" id="evidence">
+          <div class="panel-grid">
+            <article>
+              <h3>CONFIRMING EVIDENCE</h3>
+              <div class="empty">No sources loaded. Connect a data layer to populate verified evidence.</div>
+            </article>
+            <article>
+              <h3>CONTRADICTING EVIDENCE</h3>
+              <div class="empty">Contradictory evidence appears here instead of being filtered out.</div>
+            </article>
+            <article>
+              <h3>KNOWN FACTS</h3>
+              <div class="empty">Facts are kept separate from interpretation.</div>
+            </article>
+            <article>
+              <h3>MISSING EVIDENCE</h3>
+              <div class="empty">CURTAIN identifies what would need to exist for the claim to become stronger.</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="counter">
+          <article class="wide">
+            <h3>RED TEAM</h3>
+            <p>Default posture: attempt to falsify the active claim before promoting it.</p>
+            <div class="logic-list">
+              <div><b>01</b><span>What assumptions are required?</span></div>
+              <div><b>02</b><span>What mundane explanation fits the same observations?</span></div>
+              <div><b>03</b><span>What evidence would disprove the claim?</span></div>
+              <div><b>04</b><span>Which sources ultimately depend on the same origin?</span></div>
+              <div><b>05</b><span>Has the claim made testable predictions, and did they survive?</span></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel" id="genealogy">
+          <article class="wide">
+            <h3>NARRATIVE GENEALOGY</h3>
+            <p class="muted">Trace the story backward until apparently independent reporting collapses into its true origin points.</p>
+            <div class="genealogy-demo">
+              <div class="node primary">ACTIVE CLAIM</div>
+              <div class="line"></div>
+              <div class="node">ARTICLE CLUSTER</div>
+              <div class="line"></div>
+              <div class="node">ORIGINAL REPORT</div>
+              <div class="line"></div>
+              <div class="node warning">PRIMARY SOURCE ?</div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel" id="predictions">
+          <article class="wide">
+            <h3>PREDICTION LEDGER</h3>
+            <p>Every serious hypothesis should risk being wrong.</p>
+            <table>
+              <thead><tr><th>PREDICTION</th><th>DEADLINE</th><th>RESULT</th><th>WEIGHT</th></tr></thead>
+              <tbody>
+                <tr><td>Add a falsifiable prediction</td><td>—</td><td>OPEN</td><td>—</td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+
+        <section class="panel" id="silence">
+          <article class="wide">
+            <h3>NULL ZONE DETECTOR</h3>
+            <p>
+              Flag subjects where the prerequisites for attention exist—documents, money, public consequence,
+              identifiable actors—but sustained coverage or inquiry unexpectedly collapses.
+            </p>
+            <div class="warning-box">
+              Silence is an anomaly, not proof. Complexity, legal risk, audience incentives, duplication,
+              and ordinary editorial decisions must be tested first.
+            </div>
+          </article>
+        </section>
+      </div>
+    </section>
+
+    <section class="doctrine">
+      <p class="eyebrow">CURTAIN PROTOCOL</p>
+      <div class="doctrine-grid">
+        <article><b>01</b><h3>EVIDENCE</h3><p>What physically or independently verifiably exists?</p></article>
+        <article><b>02</b><h3>INTERPRETATION</h3><p>What explanation is being placed on that evidence?</p></article>
+        <article><b>03</b><h3>ALTERNATIVES</h3><p>What competing models explain the same observations?</p></article>
+        <article><b>04</b><h3>PREDICTION</h3><p>What should happen next if the hypothesis is actually true?</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Y&Y // CURTAIN</span>
+    <span>NO HYPOTHESIS IS PROMOTED BECAUSE IT IS INTERESTING.</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
