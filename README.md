@@ -1,63 +1,86 @@
 # Y&Y // CURTAIN
 
-CURTAIN is a standalone Y&Y claim-analysis and narrative-genealogy interface.
+CURTAIN is an adversarial claim-analysis and narrative-genealogy system. It searches indexed public records, retrieves source pages, separates corroboration from repetition, looks for explicit counterevidence, and traces recoverable source dependencies.
 
-## Current starter
+It does not use a generative model. The backend produces structured JSON with deterministic retrieval, text, date, citation, similarity, source-type, and stance-marker rules. The browser renders each result into its matching investigation field.
 
-This first build is intentionally front-end only. It establishes the visual shell and analysis model without pretending to have live evidence retrieval.
+## What an analysis contains
 
-### Core views
-- Evidence vs contradiction
-- Red-team / countercase
-- Narrative genealogy
-- Prediction ledger
-- Null-zone detector
-- Four-part CURTAIN protocol:
-  1. Evidence
-  2. Interpretation
-  3. Alternatives
-  4. Prediction
+- Confirming evidence
+- Contradicting evidence
+- Documented findings from primary, scholarly, and fact-check sources
+- Known-hoax and fact-check records
+- Repetition without proof
+- Missing evidence
+- Unsupported assumptions
+- Competing explanations
+- Falsifiable predictions and recovered past predictions
+- Earliest recovered source and claimant metadata
+- Narrative origin clusters
+- Direct-link, canonical, and near-duplicate dependencies
+- Propagation timeline and coverage gaps
+- Explicitly documented beneficiaries and losing parties
+- Full source index and provider diagnostics
 
-## Recommended next architecture
+## Retrieval sources
 
-1. `sources/` — source registry, quality, provenance, reliability
-2. `claims/` — normalized claims and lifecycle states
-3. `genealogy/` — narrative origin + dependency graph
-4. `analysis/` — corroboration, contradiction, independence, recency
-5. `predictions/` — falsifiable prediction ledger
-6. `null-zones/` — unexplained coverage-collapse detector
-7. `ui/` — graph views, claim detail pages, filters
-8. `jobs/` — autonomous ingestion/refresh routines
+The default engine queries:
 
-## Evidence-state model
+1. **GDELT DOC 2.0** for worldwide public news records
+2. **Google News RSS** for current and refutation-oriented reporting
+3. **Crossref** for scholarly publication metadata
+4. **Wikipedia** for reference context and indexed hoax topics
 
-Suggested states:
+It then retrieves a diverse subset of source pages, extracts publication metadata and outbound links, and compares titles and article text.
 
-- CONFIRMED
-- CREDIBLE_REPORT
-- EARLY_WARNING
-- SPECULATIVE
-- UNVERIFIED_CLAIM
-- REFUTED
-- DORMANT
+## Genealogy method
 
-## Principle
+CURTAIN treats every URL as a lead, not an independent vote.
 
-> No hypothesis is promoted merely because it is interesting.
+- Canonical URLs merge duplicate pages.
+- High title or body-text similarity forms likely syndication/origin clusters.
+- Direct outbound links create explicit dependency edges.
+- The oldest machine-dated member becomes the root candidate for its cluster.
+- The oldest root is labeled **earliest recovered source**.
+- Domain count and origin-cluster count remain separate from raw URL count.
 
-CURTAIN should always preserve a strict separation between observations, sources, interpretations, and hypotheses.
+This can collapse a large retrieved news ecosystem into a smaller set of likely origins. It cannot prove first-ever authorship when a source was private, deleted, blocked, paywalled, image-only, or absent from the indexes.
 
-## On-demand Astra integration
+## Analysis method
 
-The old submit handler only displayed placeholders. The new handler submits only on explicit form submission, shows loading/errors, prevents duplicate submissions, and renders the answer and source links using text-safe DOM APIs. No typing, page-load, timer, or ingestion event calls Astra.
+The engine uses:
 
-### Activation (not yet configured)
-1. Host `backend/server.mjs` on a Node.js 22+ service with HTTPS, running `node backend/server.mjs`.
-2. Set server-only secrets `OPENAI_API_KEY` and a strong random `CURTAIN_ACCESS_TOKEN`. Set `CURTAIN_ORIGIN=https://triadconstruct-boop.github.io`. Never commit secrets.
-3. Set `analysis-config.json` endpoint to the hosted HTTPS URL ending in `/analyze`.
-4. Submit a claim and enter the CURTAIN access token when prompted. It is never persisted by the app. This is a personal shared-token deployment, not multi-user authentication.
-5. Verify a live Astra answer and clickable source links. API access and billing are required; they have not been verified in this checkout.
+- claim keyword extraction and relevance thresholds;
+- explicit confirmation, denial, refutation, and hoax markers;
+- source-type classification for primary records, research, fact checks, wire reporting, press releases, reporting, reference pages, and social posts;
+- deterministic assumption checks based on causal, intent, absolute, anonymous-source, absence-of-evidence, measurement, and prediction language;
+- rule-selected alternative explanations and falsification tests;
+- explicit benefit/loss passages only, without treating benefit as proof of motive.
 
-The server fixes the model to `gpt-6-astra`, high reasoning, and web search. It bounds input/output, allows one in-flight analysis per process, and never automatically retries paid calls. Deploy one instance for that concurrency bound; configure account spending limits before use. Origin checking supplements token authentication and does not replace it.
+Automated relationship labels describe the text recovered. They require manual review before consequential use.
 
-The backend is not run by GitHub Pages. Until hosted and configured the page explicitly reports that Astra is not connected.
+## Deployment
+
+The frontend is deployed through GitHub Pages. `analysis-config.json` points to the Render web service.
+
+Render settings:
+
+- Build command: `node --check backend/server.mjs && node --check backend/analyzer.mjs`
+- Start command: `node backend/server.mjs`
+- Node: 22 or newer
+- Required environment variable: `CURTAIN_ACCESS_TOKEN`
+- Optional origin variables: `CURTAIN_ORIGIN` or comma-separated `CURTAIN_ORIGINS`
+
+The server accepts the known Y&Y and GitHub Pages origins. The browser keeps the access token in page memory for the current load only. No model access is used.
+
+## API
+
+`GET /health` returns engine readiness and the provider list.
+
+`POST /analyze` accepts:
+
+```json
+{"claim":"A specific, falsifiable claim"}
+```
+
+The request requires `Authorization: Bearer <CURTAIN_ACCESS_TOKEN>` and an allowed browser origin.

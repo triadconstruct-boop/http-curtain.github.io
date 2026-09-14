@@ -1,0 +1,14 @@
+{
+  "name": "yy-curtain",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node backend/server.mjs",
+    "test": "node --test backend/*.test.mjs",
+    "check": "node --check backend/analyzer.mjs && node --check backend/server.mjs && node --check app.js"
+  }
+}
